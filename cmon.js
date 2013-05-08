@@ -97,13 +97,12 @@
 
     /**
      * @param  {string|number} id
-     * @param  {Function=}     fn
+     * @param  {Function}      fn
      * @return {number}
      */    
     function on(id, fn) {
-        var len = (handlers[id] = handlers[owns](id) && handlers[id] || []).length;
-        typeof fn == 'function' && (handlers[id][len++] = fn);
-        return len;
+        if (null == id || typeof fn != 'function') { throw new TypeError; }
+        return (handlers[id] = handlers[owns](id) && handlers[id] || []).push(fn);
     }
     
     /**
@@ -113,13 +112,15 @@
      */
     function off(id, fn) {
         var fns, i;
-        if (void 0 === fn) {
-            handlers[id] = fn; // undefine (remove all)
-        } else if (fns = handlers[owns](id) && handlers[id]) {
-            for (i = fns.length; i--;) {
-                fn === fns[i] && fns.splice(i, 1);
+        if (null != id) {
+            if (void 0 === fn) {
+                handlers[id] = fn; // undefine (remove all)
+            } else if (fns = handlers[owns](id) && handlers[id]) {
+                for (i = fns.length; i--;) {
+                    fn === fns[i] && fns.splice(i, 1);
+                }
+                return fns.length;
             }
-            return fns.length;
         }
         return 0;
     }
