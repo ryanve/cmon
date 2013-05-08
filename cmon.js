@@ -101,9 +101,9 @@
      * @return {number}
      */    
     function on(id, fn) {
-        return typeof fn == 'function' ? (
-            handlers[id] = handlers[owns](id) && handlers[id] || []
-        ).push(fn) : 0;
+        var len = (handlers[id] = handlers[owns](id) && handlers[id] || []).length;
+        typeof fn == 'function' && (handlers[id][len++] = fn);
+        return len;
     }
     
     /**
