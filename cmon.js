@@ -56,8 +56,8 @@
      */
     function callEach(fns, scope) {
         if (!fns) { return; }
-        for (var i = 0, l = fns.length; i < l; i++) {
-            if (fns[i] && fns[i].call(scope) === false) {
+        for (var i = 0, l = fns.length; i < l;) {
+            if (fns[i++].call(scope) === false) {
                 break;
             }
         }
