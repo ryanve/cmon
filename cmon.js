@@ -115,7 +115,7 @@
         var fns, f, len = 0, i = 0;
         if (void 0 === fn) {
             handlers[id] = fn; // undefine (remove all)
-        } else if (fns = handlers[id]) {
+        } else if (fns = handlers[owns](id) && handlers[id]) {
             for (handlers[id] = []; (f = fns[i]); i++) {
                 f === fn || (handlers[id][len++] = f);
             }
