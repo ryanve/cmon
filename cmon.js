@@ -112,15 +112,16 @@
      * @return {number}
      */
     function off(id, fn) {
-        var fns, f, len = 0, i = 0;
+        var fns, i;
         if (void 0 === fn) {
             handlers[id] = fn; // undefine (remove all)
         } else if (fns = handlers[owns](id) && handlers[id]) {
-            for (handlers[id] = []; (f = fns[i]); i++) {
-                f === fn || (handlers[id][len++] = f);
+            for (i = fns.length; i--;) {
+                fn === fns[i] && fns.splice(i, 1);
             }
+            return fns.length;
         }
-        return len;
+        return 0;
     }
     
     /**
