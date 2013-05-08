@@ -69,7 +69,7 @@
      */
     function require(id) {
         if (null == id) { throw new TypeError; }
-        return modules[owns](id) ? modules[id] : root[id];
+        return (modules[owns](id) ? modules : root)[id];
     }
     require['main'] = void 0;
     
