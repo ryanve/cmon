@@ -2,7 +2,7 @@
  * @link        github.com/ryanve/cmon
  * @license     MIT
  * @copyright   2013 Ryan Van Etten
- * @version     0.1.3
+ * @version     0.1.5
  */
 
 /*jshint expr:true, laxcomma:true, supernew:true, debug:true, eqnull:true, node:true, boss:true, evil:true,
@@ -16,6 +16,7 @@
         make['id'] = name;
         root['require'] || make['claim']('require', make['require'], root);
         root['provide'] || make['claim']('provide', make['provide'], root);
+        make['provide'](name, make);
     }
 }(this, 'cmon', function() {
 
