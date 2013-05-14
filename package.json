@@ -1,6 +1,6 @@
 {
     "name": "cmon",
-    "description": "CommonJS/ender-inspired require/provide with on/off events",
+    "description": "CommonJS and ender-inspired require/provide with events",
     "version": "0.1.3",
     "homepage": "https://github.com/ryanve/cmon",
     "author": "Ryan Van Etten <ryanve@gmail.com> (http://ryanve.com)",
