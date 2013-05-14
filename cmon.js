@@ -2,11 +2,11 @@
  * @link        github.com/ryanve/cmon
  * @license     MIT
  * @copyright   2013 Ryan Van Etten
- * @version     0.1.2
+ * @version     0.1.3
  */
 
 /*jshint expr:true, laxcomma:true, supernew:true, debug:true, eqnull:true, node:true, boss:true, evil:true,
-  undef:true, unused:true, sub:true, browser:true, devel:true, es5:true, jquery:true, indent:4, maxerr:100 */
+  undef:true, unused:true, sub:true, browser:true, devel:true, jquery:true, indent:4, maxerr:100 */
 
 (function(root, name, make) {
     if (typeof module != 'undefined' && module['exports']) {
@@ -80,19 +80,20 @@
     function provide(id, value) {
         if (null == id) throw new TypeError('@provide');
         modules[id] = value;
-        handlers[owns](id) && callEach(handlers[id], this);
+        handlers[owns](id) && callEach(handlers[id], root); // trigger
         return value;
     }
-    
+
     /**
      * @param  {string|number|Function} id
      * @param  {*=}  value
      */
     function cmon(id, value) {
-        if (typeof id == 'function')
-            id.call(root, cmon);
-        // check for 2 exactly so that arrays map v/i/a as require
-        else return 2 == arguments.length ? provide(id, value) : require(id);
+        if (typeof id != 'function')
+            // Check for 2 so that arrays map v/i/a as require
+            return 2 == arguments.length ? provide.call(root, id, value) : require.call(root, id);
+        // Call callback and return undefined
+        id.call(root, cmon);
     }
 
     /**
@@ -104,7 +105,7 @@
         if (null == id || typeof fn != 'function') throw new TypeError('@on');
         return (handlers[id] = handlers[owns](id) && handlers[id] || []).push(fn);
     }
-    
+
     /**
      * @param  {string|number} id
      * @param  {Function=}     fn

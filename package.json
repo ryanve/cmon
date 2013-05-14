@@ -1,7 +1,7 @@
 {
     "name": "cmon",
-    "description": "CommonJS-inspired require/provide",
-    "version": "0.1.2",
+    "description": "CommonJS/ender-inspired require/provide with on/off events",
+    "version": "0.1.3",
     "homepage": "https://github.com/ryanve/cmon",
     "author": "Ryan Van Etten <ryanve@gmail.com> (http://ryanve.com)",
     "keywords": ["require", "common", "commonjs", "module", "browser", "ender"],
