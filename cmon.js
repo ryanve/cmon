@@ -2,7 +2,7 @@
  * @link        github.com/ryanve/cmon
  * @license     MIT
  * @copyright   2013 Ryan Van Etten
- * @version     0.1.5
+ * @version     0.1.6
  */
 
 /*jshint expr:true, laxcomma:true, supernew:true, debug:true, eqnull:true, node:true, boss:true, evil:true,
@@ -21,11 +21,11 @@
 }(this, 'cmon', function() {
 
     var root = this || window
-      , owns = 'hasOwnProperty'
       , handlers = {}
       , modules = {}
-      , claimed = {};
-    
+      , claimed = {}
+      , owns = claimed.hasOwnProperty;
+
     /**
      * @param  {string|number} id
      * @param  {*=}            value
@@ -47,7 +47,7 @@
         if (null == id) throw new TypeError('@unclaim');
         scope = scope || root;
         if (null == value || value === scope[id])
-            scope[id] = claimed[owns](id) ? claimed[id] : void 0;
+            scope[id] = owns.call(claimed, id) ? claimed[id] : void 0;
         return value;
     }
     
@@ -70,7 +70,7 @@
      */
     function require(id) {
         if (null == id) throw new TypeError('@require');
-        return (modules[owns](id) ? modules : root)[id];
+        return (owns.call(modules, id) ? modules : root)[id];
     }
     require['main'] = void 0;
     
@@ -81,7 +81,7 @@
     function provide(id, value) {
         if (null == id) throw new TypeError('@provide');
         modules[id] = value;
-        handlers[owns](id) && callEach(handlers[id], root); // trigger
+        owns.call(handlers, id) && callEach(handlers[id], root); // trigger
         return value;
     }
 
@@ -104,7 +104,7 @@
      */    
     function on(id, fn) {
         if (null == id || typeof fn != 'function') throw new TypeError('@on');
-        return (handlers[id] = handlers[owns](id) && handlers[id] || []).push(fn);
+        return (handlers[id] = owns.call(handlers, id) && handlers[id] || []).push(fn);
     }
 
     /**
@@ -117,7 +117,7 @@
         if (null != id) {
             if (void 0 === fn) {
                 handlers[id] = fn; // undefine (remove all)
-            } else if (fns = handlers[owns](id) && handlers[id]) {
+            } else if (fns = owns.call(handlers, id) && handlers[id]) {
                 for (i = fns.length; i--;) {
                     fn === fns[i] && fns.splice(i, 1);
                 }
