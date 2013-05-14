@@ -2,7 +2,7 @@
  * @link        github.com/ryanve/cmon
  * @license     MIT
  * @copyright   2013 Ryan Van Etten
- * @version     0.1.x
+ * @version     0.1.2
  */
 
 /*jshint expr:true, laxcomma:true, supernew:true, debug:true, eqnull:true, node:true, boss:true, evil:true,
@@ -31,7 +31,7 @@
      * @param  {*=}            scope
      */
     function claim(id, value, scope) {
-        if (null == id) { throw new TypeError; }
+        if (null == id) throw new TypeError('@claim');
         scope = scope || root;
         claimed[id] = scope[id]; // store previous value
         return scope[id] = value; 
@@ -43,7 +43,7 @@
      * @param  {*=}            scope
      */
     function unclaim(id, value, scope) {
-        if (null == id) { throw new TypeError; }
+        if (null == id) throw new TypeError('@unclaim');
         scope = scope || root;
         if (null == value || value === scope[id])
             scope[id] = claimed[owns](id) ? claimed[id] : void 0;
@@ -68,7 +68,7 @@
      * @link   wiki.commonjs.org/wiki/Modules/1.1.1
      */
     function require(id) {
-        if (null == id) { throw new TypeError; }
+        if (null == id) throw new TypeError('@require');
         return (modules[owns](id) ? modules : root)[id];
     }
     require['main'] = void 0;
@@ -78,7 +78,7 @@
      * @param  {*=}            value
      */
     function provide(id, value) {
-        if (null == id) { throw new TypeError; }
+        if (null == id) throw new TypeError('@provide');
         modules[id] = value;
         handlers[owns](id) && callEach(handlers[id], this);
         return value;
@@ -101,7 +101,7 @@
      * @return {number}
      */    
     function on(id, fn) {
-        if (null == id || typeof fn != 'function') { throw new TypeError; }
+        if (null == id || typeof fn != 'function') throw new TypeError('@on');
         return (handlers[id] = handlers[owns](id) && handlers[id] || []).push(fn);
     }
     
