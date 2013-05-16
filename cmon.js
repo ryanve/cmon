@@ -2,7 +2,7 @@
  * @link        github.com/ryanve/cmon
  * @license     MIT
  * @copyright   2013 Ryan Van Etten
- * @version     0.3.0
+ * @version     0.3.1
  */
 
 /*jshint expr:true, laxcomma:true, supernew:true, debug:true, eqnull:true, node:true, boss:true, evil:true,
@@ -112,6 +112,17 @@
         }
         
         /**
+         * @param  {Array}  arr       array to mutate
+         * @param  {*=}     ejectee   value to remove
+         */
+        function eject(arr, ejectee) {
+            for (var i = arr.length; i--;) {
+                ejectee === arr[i] && arr.splice(i, 1);
+            }
+            return arr;
+        }
+        
+        /**
          * @param  {string|number} id
          */    
         target['trigger'] = function(id) {
@@ -134,15 +145,11 @@
          * @return {number}
          */
         target['off'] = function(id, fn) {
-            var fns, i;
             if (null != id) {
                 if (void 0 === fn) {
                     handlers[id] = fn; // undefine (remove all)
-                } else if (fns = owns.call(handlers, id) && handlers[id]) {
-                    for (i = fns.length; i--;) {
-                        fn === fns[i] && fns.splice(i, 1);
-                    }
-                    return fns.length;
+                } else if (handlers[id] && owns.call(handlers, id)) {
+                    return eject(handlers[id], fn).length;
                 }
             }
             return 0;
