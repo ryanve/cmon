@@ -2,7 +2,7 @@
  * @link        github.com/ryanve/cmon
  * @license     MIT
  * @copyright   2013 Ryan Van Etten
- * @version     0.2.1
+ * @version     0.3.0
  */
 
 /*jshint expr:true, laxcomma:true, supernew:true, debug:true, eqnull:true, node:true, boss:true, evil:true,
@@ -146,6 +146,19 @@
                 }
             }
             return 0;
+        };
+        
+        /**
+         * @param  {string|number} id
+         * @param  {Function}      fn
+         * @return {number}
+         */    
+        target['one'] = function(id, fn) {
+            var wrapped;
+            return target['on'](id, wrapped = typeof fn == 'function' ? function() {
+                target['off'](id, wrapped);
+                return fn.apply(this, arguments);
+            } : wrapped);
         };
         
         return target;
