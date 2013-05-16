@@ -2,7 +2,7 @@
  * @link        github.com/ryanve/cmon
  * @license     MIT
  * @copyright   2013 Ryan Van Etten
- * @version     0.2.0
+ * @version     0.2.1
  */
 
 /*jshint expr:true, laxcomma:true, supernew:true, debug:true, eqnull:true, node:true, boss:true, evil:true,
@@ -33,7 +33,6 @@
         if (null == id) throw new TypeError('@require');
         return (owns.call(modules, id) ? modules : root)[id];
     }
-    require['main'] = void 0;
 
     /**
      * @param  {string|number} id
