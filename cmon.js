@@ -2,7 +2,7 @@
  * @link        github.com/ryanve/cmon
  * @license     MIT
  * @copyright   2013 Ryan Van Etten
- * @version     0.3.1
+ * @version     0.4.0
  */
 
 /*jshint expr:true, laxcomma:true, supernew:true, debug:true, eqnull:true, node:true, boss:true, evil:true,
@@ -103,7 +103,7 @@
          * @param  {*=}           scope
          */
         function callEach(fns, scope) {
-            if (!fns) { return; }
+            if (!fns) return;
             for (var i = 0, l = fns.length; i < l;) {
                 if (fns[i++].call(scope) === false) {
                     break;
@@ -123,10 +123,12 @@
         }
         
         /**
-         * @param  {string|number} id
+         * @param  {Array|string|number} id
          */    
         target['trigger'] = function(id) {
-            owns.call(handlers, id) && callEach(handlers[id], triggerScope);
+            id = typeof id == 'object' ? id : [id];
+            for (var i = 0, l = id.length; i < l; i++)
+                owns.call(handlers, id[i]) && callEach(handlers[id[i]], triggerScope);
         };
     
         /**
@@ -134,9 +136,22 @@
          * @param  {Function}      fn
          * @return {number}
          */    
+        /*target['on'] = function(id, fn) {
+            var k, i, count = 0;
+            id = typeof id == 'object' ? id : [id];
+            for (i in id) {
+                k = fn ? id[i] : i;  
+                count += (handlers[k] = owns.call(handlers, k) && handlers[k] || []).push(fn || id[i]);
+            }
+            return count;
+        };*/
         target['on'] = function(id, fn) {
-            if (null == id || typeof fn != 'function') throw new TypeError('@on');
-            return (handlers[id] = owns.call(handlers, id) && handlers[id] || []).push(fn);
+            if (null == id || typeof fn != 'function')
+                throw new TypeError('@on');
+            id = [].concat(id);
+            for (var n = 0, i = 0, l = id.length; i < l; i++)
+                n += (handlers[id[i]] = owns.call(handlers, id[i]) && handlers[id[i]] || []).push(fn);
+            return n;
         };
         
         /**
@@ -145,14 +160,14 @@
          * @return {number}
          */
         target['off'] = function(id, fn) {
-            if (null != id) {
-                if (void 0 === fn) {
-                    handlers[id] = fn; // undefine (remove all)
-                } else if (handlers[id] && owns.call(handlers, id)) {
-                    return eject(handlers[id], fn).length;
+            id = [].concat(id);
+            for (var k, n = 0, i = 0, l = id.length; i < l;) {
+                if (owns.call(handlers, k = id[i++]) && null != k) {
+                    if (void 0 === fn) handlers[k] = fn; // undefine (remove all)
+                    else handlers[k] && (n += eject(handlers[k], fn).length);
                 }
             }
-            return 0;
+            return n;
         };
         
         /**
@@ -161,15 +176,108 @@
          * @return {number}
          */    
         target['one'] = function(id, fn) {
-            var wrapped;
-            return target['on'](id, wrapped = typeof fn == 'function' ? function() {
+            return target['on'](id, wrapped);
+            function wrapped() {
                 target['off'](id, wrapped);
                 return fn.apply(this, arguments);
+            }
+        };
+        
+        /**
+         * @param  {string|number} id
+         * @param  {Function}      fn
+         * @return 
+         */    
+        target['done'] = function(id, fn) {
+            var wrapped;
+            return target['on'](id, wrapped = typeof fn == 'function' ? function() {
+                var r = fn.apply(this, arguments);
+                true === r && target['off'](id, wrapped);
+                return r;
             } : wrapped);
         };
         
         return target;
     }(provide, root, {}, owns));
+    
+    /**
+     * @param  {Array|string|number}   id
+     * @param  {Function}              fn
+     * @param  {*=}                    scope
+     */    
+    function inquire(id, fn, scope) {
+        id = [].concat(id);
+        fn = fn || require;
+        for (var what, i = 0, l = id.length; i < l;)
+            if (what = fn.call(scope, id[i++]), null != what)
+                return what;
+    }
+    
+    /**
+     * @param  {Array|string|number} id
+     * @param  {Function=}           fn
+     * @param  {*=}                  scope
+     */
+    function available(id, fn, scope) {
+        id = [].concat(id);
+        fn = fn || inquire;
+        for (var r = [], i = 0, l = id.length; i < l; i++)
+            if (null == (r[i] = fn.call(scope, id[i])))
+                return false;
+        return r;
+    }
+    
+    /**
+     * @param  {Array|string|number} id
+     * @param  {Function=}           fn
+     * @param  {*=}                  scope
+     */
+    function unavailable(id, fn, scope) {
+        id = [].concat(id);
+        fn = fn || inquire;
+        for (var r = [], i = 0, l = id.length; i < l; i++)
+            null == fn.call(scope, id[i]) && r.push(id[i]);
+        return r.length ? r : false;
+    }
+    
+    /**
+     * @param  {Array|string|number} id
+     * @param  {Function=}           fn
+     * @param  {*=}                  scope
+     */
+    function occupy(id, fn, scope) {
+        id = [].concat(id);
+        fn = fn || inquire;
+        for (var r = [], i = 0, l = id.length; i < l; i++)
+            r[i] = fn.call(scope, id[i]);
+        return r;
+    }
+    
+    /**
+     * @param  {Array|string|number}
+     * @param  {Function=}
+     * @param  {number=}
+     * @return {Array|boolean}
+     */
+    cmon['able'] = function(id, fn, timeout) {
+        if (null == id) throw new TypeError('@able');
+        var force = typeof timeout == 'number'
+          , queue = unavailable(id)
+          , now = !queue;
+
+        function run() {
+            if (now || force || !unavailable(id)) {
+                now || provide['off'](queue, run);
+                fn.apply(root, occupy(id));
+            }
+        }
+
+        null == fn || (now ? run() : (
+            provide['on'](queue, run), 
+            force && setTimeout(run, timeout)
+        ));
+        return now;
+    };
 
     cmon['provide'] = provide;
     cmon['require'] = require;
