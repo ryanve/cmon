@@ -2,7 +2,7 @@
  * @link        github.com/ryanve/cmon
  * @license     MIT
  * @copyright   2013 Ryan Van Etten
- * @version     0.4.0
+ * @version     0.4.1
  */
 
 /*jshint expr:true, laxcomma:true, supernew:true, debug:true, eqnull:true, node:true, boss:true, evil:true,
@@ -97,28 +97,23 @@
     
     // Make an on/off/trigger event API for provide()
     (function(target, triggerScope, handlers, owns) {
-
         /**
          * @param  {Array|Object} fns
          * @param  {*=}           scope
          */
         function callEach(fns, scope) {
-            if (!fns) return;
-            for (var i = 0, l = fns.length; i < l;) {
-                if (fns[i++].call(scope) === false) {
-                    break;
-                }
+            for (var i = 0, l = fns && fns.length; i < l;) {
+                if (false === fns[i++].call(scope)) break;
             }
         }
-        
+
         /**
-         * @param  {Array}  arr       array to mutate
-         * @param  {*=}     ejectee   value to remove
+         * @param  {Array} arr      array to mutate
+         * @param  {*=}    ejectee  value to remove
          */
         function eject(arr, ejectee) {
-            for (var i = arr.length; i--;) {
+            for (var i = arr.length; i--;)
                 ejectee === arr[i] && arr.splice(i, 1);
-            }
             return arr;
         }
         
@@ -163,7 +158,7 @@
             id = [].concat(id);
             for (var k, n = 0, i = 0, l = id.length; i < l;) {
                 if (owns.call(handlers, k = id[i++]) && null != k) {
-                    if (void 0 === fn) handlers[k] = fn; // undefine (remove all)
+                    if (void 0 === fn) handlers[k] = fn; // Undefine - remove all.
                     else handlers[k] && (n += eject(handlers[k], fn).length);
                 }
             }
