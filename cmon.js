@@ -157,8 +157,8 @@
         };
         
         /**
-         * @param  {string|number} id
-         * @param  {Function}      fn
+         * @param  {string|number|Array} id
+         * @param  {Function}            fn
          * @return {number}
          */    
         target['one'] = function(id, fn) {
@@ -170,8 +170,8 @@
         };
         
         /**
-         * @param  {string|number} id
-         * @param  {Function}      fn
+         * @param  {string|number|Array} id
+         * @param  {Function}            fn
          * @return 
          */    
         target['done'] = function(id, fn) {
