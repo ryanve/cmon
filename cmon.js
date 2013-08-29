@@ -131,15 +131,6 @@
          * @param  {Function}      fn
          * @return {number}
          */    
-        /*target['on'] = function(id, fn) {
-            var k, i, count = 0;
-            id = typeof id == 'object' ? id : [id];
-            for (i in id) {
-                k = fn ? id[i] : i;  
-                count += (handlers[k] = owns.call(handlers, k) && handlers[k] || []).push(fn || id[i]);
-            }
-            return count;
-        };*/
         target['on'] = function(id, fn) {
             if (null == id || typeof fn != 'function')
                 throw new TypeError('@on');
