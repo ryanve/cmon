@@ -23,7 +23,7 @@ At runtime in a browser `cmon` claims the global `require`/`provide` **if** uncl
 - `cmon.provide(id, value)` - provide a module
 - `cmon.provide.on(id, handler)` - attach a handler to run anytime `id` is provided
 - `cmon.provide.one(id, handler)` - attach a 1-time handler to run the next time `id` is provided
-- `cmon.provide.able(id, handler)` - attach a 1-time handler to run as soon as `id` is available (now or later)
+- `cmon.provide.able(id, handler)` - attach a 1-time handler to run when `id` is available&mdash;now or later.
 - `cmon.provide.off(id, handler)` - remove a handler
 - `cmon.provide.off(id)` - remove all `id` handlers
 - `cmon.provide.trigger(id)` - manually trigger active `id` handlers
