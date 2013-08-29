@@ -127,8 +127,8 @@
         };
     
         /**
-         * @param  {string|number} id
-         * @param  {Function}      fn
+         * @param  {string|number|Array} id
+         * @param  {Function}            fn
          * @return {number}
          */    
         target['on'] = function(id, fn) {
@@ -141,8 +141,8 @@
         };
         
         /**
-         * @param  {string|number} id
-         * @param  {Function=}     fn
+         * @param  {string|number|Array} id
+         * @param  {Function=}           fn
          * @return {number}
          */
         target['off'] = function(id, fn) {
@@ -240,9 +240,9 @@
     }
     
     /**
-     * @param  {Array|string|number}
-     * @param  {Function=}
-     * @param  {number=}
+     * @param  {Array|string|number} id
+     * @param  {Function=}           fn
+     * @param  {number=}             timeout
      * @return {Array|boolean}
      */
     cmon['able'] = function(id, fn, timeout) {
