@@ -102,9 +102,8 @@
          * @param  {*=}           scope
          */
         function callEach(fns, scope) {
-            for (var i = 0, l = fns && fns.length; i < l;) {
+            for (var i = 0, l = fns && fns.length; i < l;)
                 if (false === fns[i++].call(scope)) break;
-            }
         }
 
         /**
