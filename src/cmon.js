@@ -1,9 +1,3 @@
-/*!
- * cmon 0.5.0+201309030831
- * https://github.com/ryanve/cmon
- * MIT License 2013 Ryan Van Etten
- */
-
 (function(root, name, make) {
     if (typeof module != 'undefined' && module['exports']) {
         module['exports'] = make.call(root);
