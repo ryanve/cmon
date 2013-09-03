@@ -18,9 +18,10 @@ module.exports = function(grunt) {
                     + '\n * MIT License 2013 <%= pkg.author %>'
                     + '\n */\n\n'
             },
-            dist: {
-                src: ['src/<%= pkg.name %>.js'],
-                dest: '<%= pkg.name %>.js'
+            build: {
+                files: {
+                    '<%= pkg.name %>.js': ['src/<%= pkg.name %>.js']
+                }
             }
         },
         uglify: {
@@ -35,11 +36,10 @@ module.exports = function(grunt) {
         }
     });
     
-    // Load task plugins
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
-
-    // 'default' is run by typing 'grunt' on the command line
+    
+    // Type `grunt` on the command line to run.
     grunt.registerTask('default', ['jshint:beforeconcat', 'concat', 'jshint:afterconcat', 'uglify']);
 };
