@@ -1,5 +1,5 @@
 /*!
- * cmon 0.5.1+201309031722
+ * cmon 0.5.2+201309031951
  * https://github.com/ryanve/cmon
  * MIT License 2013 Ryan Van Etten
  */
