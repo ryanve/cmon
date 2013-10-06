@@ -1,12 +1,12 @@
-# [cmon](https://github.com/ryanve/cmon)
+# [cmon](../../)
 
-[CommonJS](http://en.wikipedia.org/wiki/CommonJS) and [ender](https://github.com/ender-js/ender-js)-inspired require/provide with events
+#### [CommonJS](http://en.wikipedia.org/wiki/CommonJS) and [ender](https://github.com/ender-js/ender-js)-inspired require/provide with events
 
-```
+```sh
 $ npm install cmon
 ```
 
-## API
+## API ([0.5](../../releases))
 
 ### cmon()
 
@@ -15,7 +15,7 @@ $ npm install cmon
 - `cmon(id, value, guard)` - delegates to `cmon.require(id)`
 - `cmon(callback)` - runs in the root scope and receives `(cmon)`
 
-### require/provide
+### .require / .provide
 
 At runtime in a browser `cmon` claims the global `require`/`provide` **if** unclaimed. Otherwise access them as methods:
 
@@ -28,20 +28,17 @@ At runtime in a browser `cmon` claims the global `require`/`provide` **if** uncl
 - `cmon.provide.off(id)` - remove all `id` handlers
 - `cmon.provide.trigger(id)` - manually trigger active `id` handlers
 
-### claim/unclaim
+### .claim / .unclaim
 
 - `cmon.claim(id, value, opt_scope)` - expose a module to the **root** or `opt_scope`
 - `cmon.unclaim(id, value, opt_scope)` - safely unexpose a module that was exposed via claim
 
-### noConflict
+### .noConflict
 
 - `cmon.noConflict()` - unclaim `require`/`provide`
 - `cmon.noConflict(true)` - unclaim `require`/`provide`/`cmon`
 - `cmon.noConflict(callback)` - unclaim `require`/`provide`/`cmon`
 
-
-## license
-
-### [cmon](http://github.com/ryanve/cmon) is available under the [MIT license](http://en.wikipedia.org/wiki/MIT_License)
+## [MIT License](opensource.org/licenses/MIT)
 
 Copyright (C) 2013 by [Ryan Van Etten](https://github.com/ryanve)
