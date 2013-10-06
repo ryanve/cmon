@@ -39,6 +39,6 @@ At runtime in a browser `cmon` claims the global `require`/`provide` **if** uncl
 - `cmon.noConflict(true)` - unclaim `require`/`provide`/`cmon`
 - `cmon.noConflict(callback)` - unclaim `require`/`provide`/`cmon`
 
-## [MIT License](opensource.org/licenses/MIT)
+## [MIT License](http://opensource.org/licenses/MIT)
 
 Copyright (C) 2013 by [Ryan Van Etten](https://github.com/ryanve)
