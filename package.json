@@ -1,8 +1,9 @@
 {
     "name": "cmon",
     "description": "CommonJS and ender-inspired require/provide with events",
-    "version": "0.5.2",
+    "version": "0.5.3",
     "homepage": "https://github.com/ryanve/cmon",
+    "license": "MIT",
     "author": "Ryan Van Etten",
     "keywords": ["require", "common", "commonjs", "module", "browser", "ender"],
     "main": "./cmon.js",

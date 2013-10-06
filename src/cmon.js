@@ -3,7 +3,6 @@
         module['exports'] = make.call(root);
     } else {
         root[name] = make = make.call(root);
-        make['id'] = name;
         root['require'] || make['claim']('require', make['require'], root);
         root['provide'] || make['claim']('provide', make['provide'], root);
         make['provide'](name, make);
