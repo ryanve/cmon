@@ -15,8 +15,8 @@
       , owns = claimed.hasOwnProperty;
 
     /**
-     * @param  {string|number} id
-     * @link   wiki.commonjs.org/wiki/Modules/1.1.1
+     * @param {string|number} id
+     * @link http://wiki.commonjs.org/wiki/Modules/1.1.1
      */
     function require(id) {
         if (null == id) throw new TypeError('@require');
@@ -24,8 +24,8 @@
     }
 
     /**
-     * @param  {string|number} id
-     * @param  {*=}            value
+     * @param {string|number} id
+     * @param {*=} value
      */
     function provide(id, value) {
         if (null == id) throw new TypeError('@provide');
@@ -35,8 +35,8 @@
     }
 
     /**
-     * @param  {string|number|Function} id
-     * @param  {*=}  value
+     * @param {string|number|Function} id
+     * @param {*=} value
      */
     function cmon(id, value) {
         if (typeof id != 'function')
@@ -47,9 +47,9 @@
     }
     
     /**
-     * @param  {string|number} id
-     * @param  {*=}            value
-     * @param  {*=}            scope
+     * @param {string|number} id
+     * @param {*=} value
+     * @param {*=} scope
      */
     function claim(id, value, scope) {
         if (null == id) throw new TypeError('@claim');
@@ -59,9 +59,9 @@
     }
     
     /**
-     * @param  {string|number} id
-     * @param  {*=}            value
-     * @param  {*=}            scope
+     * @param {string|number} id
+     * @param {*=} value
+     * @param {*=} scope
      */
     function unclaim(id, value, scope) {
         if (null == id) throw new TypeError('@unclaim');
@@ -72,8 +72,8 @@
     }
     
     /**
-     * @this   {Object|Function}
-     * @param  {(boolean|Function)=} fn 
+     * @this {Object|Function}
+     * @param {(boolean|Function)=} fn 
      * @return {Object|Function}
      */
     function noConflict(fn) {
@@ -87,8 +87,8 @@
     // Make an on/off/trigger event API for provide()
     (function(target, triggerScope, handlers, owns) {
         /**
-         * @param  {Array|Object} fns
-         * @param  {*=}           scope
+         * @param {Array|Object} fns
+         * @param {*=} scope
          */
         function callEach(fns, scope) {
             for (var i = 0, l = fns && fns.length; i < l;)
@@ -96,17 +96,17 @@
         }
 
         /**
-         * @param  {Array} arr      array to mutate
-         * @param  {*=}    ejectee  value to remove
+         * @param {Array} arr to mutate
+         * @param {*=} item to remove
          */
-        function eject(arr, ejectee) {
+        function pull(arr, item) {
             for (var i = arr.length; i--;)
-                ejectee === arr[i] && arr.splice(i, 1);
+                item === arr[i] && arr.splice(i, 1);
             return arr;
         }
         
         /**
-         * @param  {Array|string|number} id
+         * @param {Array|string|number} id
          */    
         target['trigger'] = function(id) {
             id = typeof id == 'object' ? id : [id];
@@ -115,8 +115,8 @@
         };
     
         /**
-         * @param  {string|number|Array} id
-         * @param  {Function}            fn
+         * @param {Array|string|number} id
+         * @param {Function} fn
          * @return {number}
          */    
         target['on'] = function(id, fn) {
@@ -129,24 +129,24 @@
         };
         
         /**
-         * @param  {string|number|Array} id
-         * @param  {Function=}           fn
+         * @param {Array|string|number} id
+         * @param {Function=} fn
          * @return {number}
          */
         target['off'] = function(id, fn) {
             id = [].concat(id);
             for (var k, n = 0, i = 0, l = id.length; i < l;) {
                 if (owns.call(handlers, k = id[i++]) && null != k) {
-                    if (void 0 === fn) handlers[k] = fn; // Undefine - remove all.
-                    else handlers[k] && (n += eject(handlers[k], fn).length);
+                    if (void 0 === fn) handlers[k] = fn; // Undefine (remove all).
+                    else handlers[k] && (n += pull(handlers[k], fn).length);
                 }
             }
             return n;
         };
         
         /**
-         * @param  {string|number|Array} id
-         * @param  {Function}            fn
+         * @param {Array|string|number} id
+         * @param {Function} fn
          * @return {number}
          */    
         target['one'] = function(id, fn) {
@@ -158,9 +158,9 @@
         };
         
         /**
-         * @param  {string|number|Array} id
-         * @param  {Function}            fn
-         * @return 
+         * @param {Array|string|number} id
+         * @param {Function} fn
+         * @return {number}
          */    
         target['done'] = function(id, fn) {
             var wrapped;
@@ -175,9 +175,9 @@
     }(provide, root, {}, owns));
     
     /**
-     * @param  {Array|string|number}   id
-     * @param  {Function}              fn
-     * @param  {*=}                    scope
+     * @param {Array|string|number} id
+     * @param {Function} fn
+     * @param {*=} scope
      */    
     function inquire(id, fn, scope) {
         id = [].concat(id);
@@ -188,9 +188,9 @@
     }
     
     /**
-     * @param  {Array|string|number} id
-     * @param  {Function=}           fn
-     * @param  {*=}                  scope
+     * @param {Array|string|number} id
+     * @param {Function=} fn
+     * @param {*=} scope
      */
     function unavailable(id, fn, scope) {
         id = [].concat(id);
@@ -201,9 +201,9 @@
     }
     
     /**
-     * @param  {Array|string|number} id
-     * @param  {Function=}           fn
-     * @param  {*=}                  scope
+     * @param {Array|string|number} id
+     * @param {Function=} fn
+     * @param {*=} scope
      */
     function occupy(id, fn, scope) {
         id = [].concat(id);
@@ -214,9 +214,9 @@
     }
     
     /**
-     * @param  {Array|string|number} id
-     * @param  {Function=}           fn
-     * @param  {number=}             timeout
+     * @param {Array|string|number} id
+     * @param {Function=} fn
+     * @param {number=} timeout
      * @return {Array|boolean}
      */
     cmon['able'] = function(id, fn, timeout) {
