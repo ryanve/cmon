@@ -9,18 +9,21 @@
     }
 }(this, 'cmon', function() {
 
-    var root = this || window
+    var globe = typeof window != 'undefined' && window || typeof global != 'undefined' && global
+      , root = this || globe
       , modules = {}
       , claimed = {}
       , owns = claimed.hasOwnProperty;
 
     /**
-     * @param {string|number} id
+     * @param {string|number|Array} id or deps
+     * @param {(Function|number)=} fn or index
      * @link http://wiki.commonjs.org/wiki/Modules/1.1.1
      */
-    function require(id) {
+    function require(id, fn) {
         if (null == id) throw new TypeError('@require');
-        return (owns.call(modules, id) ? modules : root)[id];
+        if (typeof fn == 'function') return able(id, fn);
+        return (null != modules[id] ? modules : null != root[id] ? root : globe)[id];
     }
 
     /**
@@ -37,13 +40,12 @@
     /**
      * @param {string|number|Function} id
      * @param {*=} value
+     * @param {*=} guard
      */
     function cmon(id, value) {
-        if (typeof id != 'function')
-            // Check for 2 so that arrays map v/i/a as require
-            return 2 == arguments.length ? provide.call(root, id, value) : require.call(root, id);
-        // Call callback and return undefined
-        id.call(root, cmon);
+        if (typeof id == 'function') return void id.call(root, cmon);
+        // Check for 2 so that arrays map v/i/a as require
+        return 2 == arguments.length ? provide(id, value) : require(id);
     }
     
     /**
@@ -217,9 +219,9 @@
      * @param {Array|string|number} id
      * @param {Function=} fn
      * @param {number=} timeout
-     * @return {Array|boolean}
+     * @return {boolean}
      */
-    cmon['able'] = function(id, fn, timeout) {
+    function able(id, fn, timeout) {
         if (null == id) throw new TypeError('@able');
         var force = typeof timeout == 'number'
           , queue = unavailable(id)
@@ -237,8 +239,9 @@
             force && setTimeout(run, timeout)
         ));
         return now;
-    };
-
+    }
+    
+    cmon['able'] = able;
     cmon['provide'] = provide;
     cmon['require'] = require;
     cmon['claim'] = claim;
