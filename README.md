@@ -6,32 +6,33 @@
 $ npm install cmon
 ```
 
-## API ([0.5](../../releases))
+## API ([0.6](../../releases))
 
 ### cmon()
 
-- `cmon(id)` - delegates to `cmon.require(id)`
-- `cmon(id, value)` - delegates to `cmon.provide(id, value)`
-- `cmon(id, value, guard)` - delegates to `cmon.require(id)`
-- `cmon(callback)` - runs in the root scope and receives `(cmon)`
+- `cmon(id)` - delegate to `cmon.require(id)`
+- `cmon(id, value)` - delegate to `cmon.provide(id, value)`
+- `cmon(id, value, guard)` - delegate to `cmon.require(id)`
+- `cmon(fn)` - call `fn` in the root scope and receive `(cmon)`
 
 ### .require / .provide
 
 At runtime in a browser `cmon` claims the global `require`/`provide` **if** unclaimed. Otherwise access them as methods:
 
-- `cmon.require(id)` - get a module that was provided via `cmon.provide`
-- `cmon.provide(id, value)` - provide a module
-- `cmon.provide.on(id, handler)` - attach a handler to run anytime `id` is provided
-- `cmon.provide.one(id, handler)` - attach a 1-time handler to run the next time `id` is provided
-- `cmon.provide.able(id, handler)` - attach a 1-time handler to run when `id` is available&mdash;now or later.
-- `cmon.provide.off(id, handler)` - remove a handler
-- `cmon.provide.off(id)` - remove all `id` handlers
-- `cmon.provide.trigger(id)` - manually trigger active `id` handlers
+- `cmon.require(id)` get a module that was provided via `cmon.provide`
+- `cmon.require(deps, fn)` async (<var>fn</var> applies with <var>deps</var> when available)
+- `cmon.provide(id, value)` provide a module
+- `cmon.provide.on(id, fn)` attach a handler to run anytime <var>id</var> is provided
+- `cmon.provide.one(id, fn)` attach a 1-time handler to run the next time <var>id</var> is provided
+- `cmon.provide.off(id, fn)` remove a handler
+- `cmon.provide.off(id)` remove all <var>id</var> handlers
+- `cmon.provide.emit(id)` manually trigger active `id` handlers
+- `cmon.able(id, fn?, timeout?)` attach a 1-time handler runs when `id` is available&mdash;async.
 
 ### .claim / .unclaim
 
-- `cmon.claim(id, value, opt_scope)` - expose a module to the **root** or `opt_scope`
-- `cmon.unclaim(id, value, opt_scope)` - safely unexpose a module that was exposed via claim
+- `cmon.claim(id, value, target?)` - expose a module to the <b>root</b> or to <var>target</var>
+- `cmon.unclaim(id, value, target?)` - safely unexpose a module that was exposed via claim
 
 ### .noConflict
 
@@ -39,6 +40,6 @@ At runtime in a browser `cmon` claims the global `require`/`provide` **if** uncl
 - `cmon.noConflict(true)` - unclaim `require`/`provide`/`cmon`
 - `cmon.noConflict(callback)` - unclaim `require`/`provide`/`cmon`
 
-## [MIT License](http://opensource.org/licenses/MIT)
+## License: [MIT](http://opensource.org/licenses/MIT)
 
 Copyright (C) 2013 by [Ryan Van Etten](https://github.com/ryanve)

@@ -1,11 +1,11 @@
 {
     "name": "cmon",
     "description": "CommonJS and ender-inspired require/provide with events",
-    "version": "0.5.3",
+    "version": "0.6.0",
     "homepage": "https://github.com/ryanve/cmon",
     "license": "MIT",
     "author": "Ryan Van Etten",
-    "keywords": ["require", "common", "commonjs", "module", "browser", "ender"],
+    "keywords": ["require", "common", "commonjs", "module", "browser", "ender", "async"],
     "main": "./cmon.js",
     "ender": "noop",
     "repository": {
@@ -17,6 +17,6 @@
         "grunt-contrib-uglify": "~0.2.4",
         "grunt-contrib-concat": "~0.3.0",
         "grunt-contrib-jshint": "~0.6.4",
-        "aok": "~1.2"
+        "aok": "~1.7.0"
     }
 }
