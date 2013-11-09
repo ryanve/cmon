@@ -1,6 +1,6 @@
-(function(root) {
-    var cmon = root.cmon
-      , aok = root.aok
+(function(win, req) {
+    var cmon = req ? req('../src') : win.cmon
+      , aok = req ? req('../node_modules/aok') : win.aok
       , provide = cmon.provide
       , require = cmon.require
       , port = {};
@@ -63,4 +63,4 @@
         });
         provide(id, given);
     }('asyncRequire', {}));
-}(this));
+}(this.window, typeof require == 'function' && require));
