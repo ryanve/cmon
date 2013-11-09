@@ -46,4 +46,21 @@
         aok({id:'offSingle', test:handler.didnt});
         handler.reset();
     }('onHandles'));
+    
+    (function(id, given) {
+        aok({
+            id: id
+          , test: void 0 === require(id) && given === provide(id, given) && given === require(id)
+        });
+    }('requireSync', {}));
+    
+    (function(id, given) {
+        aok({
+            id: id + 'Type'
+          , test: typeof require(id, function(a) {
+                aok({id: id, test: given === a}); 
+            }) == 'boolean'
+        });
+        provide(id, given);
+    }('asyncRequire', {}));
 }(this));
