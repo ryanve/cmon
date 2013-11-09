@@ -40,6 +40,19 @@ At runtime in a browser `cmon` claims the global `require`/`provide` **if** uncl
 - `cmon.noConflict(true)` Unclaim `require`/`provide`/`cmon`
 - `cmon.noConflict(callback)` Unclaim `require`/`provide`/`cmon`
 
+## Developers
+
+<b>Contribute</b> by making edits in [`/src`](./src) or reporting [issues](../../issues).
+
+```sh
+$ npm install
+$ grunt jshint:src
+```
+
+## Fund
+
+Fund development with [tips to @ryanve](https://www.gittip.com/ryanve/) =)
+
 ## License: [MIT](http://opensource.org/licenses/MIT)
 
 Copyright (C) 2013 by [Ryan Van Etten](https://github.com/ryanve)
