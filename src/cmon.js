@@ -33,7 +33,7 @@
     function provide(id, value) {
         if (null == id) throw new TypeError('@provide');
         modules[id] = value;
-        provide['trigger'](id);
+        provide['emit'](id);
         return value;
     }
 
@@ -86,15 +86,16 @@
         return this;
     }
     
-    // Make an on/off/trigger event API for provide()
-    (function(target, triggerScope, handlers, owns) {
+    // Make an event emitter API for provide()
+    (function(target, context, handlers, owns) {
         /**
          * @param {Array|Object} fns
          * @param {*=} scope
+         * @param {number} fired
          */
         function callEach(fns, scope) {
-            for (var i = 0, l = fns && fns.length; i < l;)
-                if (false === fns[i++].call(scope)) break;
+            for (var i = 0, l = fns && fns.length; i < l && false !== fns[i++].call(scope);) {}
+            return i;
         }
 
         /**
@@ -102,18 +103,27 @@
          * @param {*=} item to remove
          */
         function pull(arr, item) {
-            for (var i = arr.length; i--;)
-                item === arr[i] && arr.splice(i, 1);
+            // Loop down so that splices don't interfere with subsequent iterations.
+            for (var i = arr.length; i--;) item === arr[i] && arr.splice(i, 1);
             return arr;
         }
         
         /**
+         * @param {string|number} id
+         * @param {number} fired
+         */    
+        target['emit'] = function(id) {
+            return owns.call(handlers, id) ? callEach(handlers[id], context) : 0;
+        };
+        
+        /**
+         * @deprecated Use .emit() instead
          * @param {Array|string|number} id
          */    
         target['trigger'] = function(id) {
-            id = typeof id == 'object' ? id : [id];
-            for (var i = 0, l = id.length; i < l; i++)
-                owns.call(handlers, id[i]) && callEach(handlers[id[i]], triggerScope);
+            var l, i = 0, em = target['emit'];
+            if (typeof id != 'object') em(id);
+            else for (l = id.length; i < l;) em(id[i++]);
         };
     
         /**
@@ -122,8 +132,7 @@
          * @return {number}
          */    
         target['on'] = function(id, fn) {
-            if (null == id || typeof fn != 'function')
-                throw new TypeError('@on');
+            if (null == id || typeof fn != 'function') throw new TypeError('@on');
             id = [].concat(id);
             for (var n = 0, i = 0, l = id.length; i < l; i++)
                 n += (handlers[id[i]] = owns.call(handlers, id[i]) && handlers[id[i]] || []).push(fn);
